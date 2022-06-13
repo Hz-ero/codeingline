@@ -145,8 +145,8 @@ export function activate(context: ExtensionContext) {
     replayCodeBetween(snapPatches, {
       start: 0,
       end: Infinity,
-      typeDelay: 100,
-      stepDelay: 1200,
+      typeDelay: 80,
+      stepDelay: 600,
     });
   };
   type ReplayOption = {
@@ -166,6 +166,7 @@ export function activate(context: ExtensionContext) {
     snapPatches: Array<Patch[]>,
     option: ReplayOption
   ) => {
+    window.showInformationMessage("代码重播开始");
     // 编辑器
     let actEditor = window.activeTextEditor;
     if (!actEditor) return;
@@ -199,11 +200,14 @@ export function activate(context: ExtensionContext) {
           } else if ((anim.action = "delete")) {
             commands.executeCommand("deleteLeft");
 
-            await sleep(stepDelay);
+            await sleep(typeDelay);
           }
         }
+        await sleep(stepDelay);
       }
     }
+
+    window.showInformationMessage("代码重播结束");
   };
 
   const createFiles = () => {
